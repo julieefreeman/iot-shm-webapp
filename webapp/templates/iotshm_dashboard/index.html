@@ -1,11 +1,12 @@
-{% load staticfiles %}
-<script type="text/javascript" src="{% static 'twitter_bootstrap/js/transition.js' %}"></script>
-{% if latest_question_list %}
-    <ul>
-    {% for question in latest_question_list %}
-       <li><a href="{% url 'iotshm_dashboard:detail' question.id %}">{{ question.question_text }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
+{% extends 'general/base.html' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block body_block %}
+    {% if user.is_authenticated %}
+        <h2>Welcome {{ user.first_name }}!</h2>
+    {% else %}
+        <h2>Welcome to IoT SHM Dashboard! Please login.</h2>
+    {% endif %}
+{% endblock %}

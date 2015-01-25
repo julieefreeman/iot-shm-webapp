@@ -1,22 +1,14 @@
-from django.contrib import admin
-
 # Register your models here.
 from django.contrib import admin
-from django_admin_bootstrapped.widgets import GenericContentTypeSelect
-from iotshm_dashboard.models import Choice, Question
+from iotshm_dashboard.models import Building
 
-class ChoiceInline(admin.TabularInline):
-    model = Choice
-    extra = 3
-
-class QuestionAdmin(admin.ModelAdmin):
+class BuildingAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['question_text']}),
-        ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
+        (None,               {'fields': ['name','number', 'manager']}),
+        ('Location',         {'fields': ['address', 'city', 'state', 'zipcode']}),
     ]
-    inlines = [ChoiceInline]
-    list_display = ('question_text', 'pub_date', 'was_published_recently')
-    list_filter = ['pub_date']
-    search_fields = ['question_text']
+    list_display = ('name','number', 'manager','address', 'city', 'state', 'zipcode')
+    list_filter = ['number','manager', 'name']
+    search_fields = ['number','manager']
 
-admin.site.register(Question, QuestionAdmin)
+admin.site.register(Building,BuildingAdmin)

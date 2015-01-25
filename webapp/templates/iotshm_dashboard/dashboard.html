@@ -1,0 +1,21 @@
+{% extends 'general/sidebar.html' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block navigation_links %}
+        <select class="form-control">
+             <option selected disabled>Building</option>
+            {% for building in buildings %}
+                {% if building.manager == user %}
+                    <option>{{ building.number }} - {{ building.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <li class="active"><a href="#">Real Time</a></li>
+        <li><a href="#">Long Term Trends</a></li>
+{% endblock %}
+
+{% block main_block %}
+    <h2>{{user.first_name}}'s dashboard :)</h2>
+{% endblock %}

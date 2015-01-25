@@ -3,10 +3,10 @@ from iotshm_dashboard import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    # ex: /iotshm_dashboard/5/
-    url(r'^(?P<question_id>\d+)/$', views.detail, name='detail'),
-    # ex: /iotshm_dashboard/5/results/
-    url(r'^(?P<question_id>\d+)/results/$', views.results, name='results'),
-    # ex: /iotshm_dashboard/5/vote/
-    url(r'^(?P<question_id>\d+)/vote/$', views.vote, name='vote'),
+    url(r'^register/$', views.register, name='register'),
+    url(r'^login/$', views.user_login, name='login'),
+    url(r'^logout/$', views.user_logout, name='logout'),
+    url(r'^aboutiotshm/$', views.about, name='about'),
+    url(r'^contactus/$', views.contact, name='contactus'),
+    url(r'^dashboard/$', views.dashboard, name='dashboard'),
 )
