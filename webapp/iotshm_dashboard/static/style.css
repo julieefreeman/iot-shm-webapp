@@ -1,0 +1,9 @@
+#banner {
+    background-color:rgba(255, 255, 255, 0.75);
+}
+
+#bgsplashcontainer {
+    background-image:url("img/tower.jpeg");
+    background-repeat:no-repeat;
+    background-size: cover;
+}

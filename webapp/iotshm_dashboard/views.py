@@ -27,10 +27,37 @@ def dashboard(request):
     return render_to_response('iotshm_dashboard/dashboard.html', data, context)
 
 @login_required
+def change_password(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        curr_pass = request.POST['curr_pass']
+        new_pass = request.POST['new_pass']
+        confirm_pass = request.POST['confirm_pass']
+        user = authenticate(username=request.user.username, password=curr_pass)
+
+        if user:
+            if new_pass==confirm_pass:
+                user.password = new_pass
+                return HttpResponseRedirect('/iotshm/change_password/complete/')
+            else:
+                return HttpResponse("Confirmation of password failed.")
+        else:
+            print("Invalid current password")
+            return HttpResponse("Invalid login details supplied.")
+    else:
+        return render_to_response('registration/change_password.html', {}, context)
+
+@login_required
+def change_password_complete(request):
+    context = RequestContext(request)
+    return render_to_response('registration/change_password_complete.html', {}, context)
+
+@login_required
 def user_logout(request):
     logout(request)
     context = RequestContext(request)
-    return render_to_response('iotshm_dashboard/logout.html', {}, context)
+    return render_to_response('registration/logout.html', {}, context)
 
 def user_login(request):
     context = RequestContext(request)
@@ -50,30 +77,4 @@ def user_login(request):
             print("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render_to_response('iotshm_dashboard/login.html', {}, context)
-
-# # currently not implementing the register functionality
-# # the admin must create users and their buildings through the admin portal
-# def register(request):
-#     context = RequestContext(request)
-#
-#     registered = False
-#
-#     if request.method == 'POST':
-#
-#         user_form = UserForm(data=request.POST)
-#         if user_form.is_valid():
-#             user = user_form.save()
-#             user.set_password(user.password)
-#             user.save()
-#             registered = True
-#
-#         else:
-#             print(user_form.errors)
-#
-#     else:
-#         user_form = UserForm()
-#     return render_to_response(
-#         'iotshm_dashboard/register.html',
-#             {'user_form': user_form, 'registered': registered},
-#             context)
+        return render_to_response('registration/login.html', {}, context)

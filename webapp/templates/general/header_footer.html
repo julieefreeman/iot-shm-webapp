@@ -1,21 +1,21 @@
 {% load bootstrap3 %}
 {% bootstrap_javascript %}
 {% bootstrap_css %}
+<html>
+<link href="{{ STATIC_URL }}style.css" rel="stylesheet" type="text/css"/>
 
 {#<head align="center">#}
 {#    <title align="center">IoT SHM - {% block title %}Dashboard{% endblock %}</title>#}
 {#</head>#}
 
-<body class="page-container"  style="background-image:url('{{ STATIC_URL }}tower.jpeg');background-repeat:no-repeat;background-size: cover">
+{#<body class="page-container" id="main-page" style="background-image:url('{{ STATIC_URL }}img/tower.jpeg');background-repeat:no-repeat;background-size: cover">#}
+
+<body class="page-container" id="bgsplashcontainer">
     <style>
         body {
             padding-top: 50px;
             padding-bottom: 50px;
         }
-{#        select {#}
-{#            style: 'btn-info';#}
-{#            size: 4;#}
-{#        }#}
     </style>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -48,3 +48,4 @@
         <a align="right" href="/iotshm/aboutiotshm/" style="color:white">About IoT-SHM</a>
     </div>
 </body>
+</html>
