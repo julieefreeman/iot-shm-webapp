@@ -3,19 +3,32 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
-{% block navigation_links %}
-        <select class="form-control">
-             <option selected disabled>Building</option>
-            {% for building in buildings %}
-                {% if building.manager == user %}
-                    <option>{{ building.number }} - {{ building.name }}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
-        <li class="active"><a href="#">Real Time</a></li>
-        <li><a href="#">Long Term Trends</a></li>
-{% endblock %}
-
-{% block main_block %}
-    <h2>{{user.first_name}}'s dashboard :)</h2>
+{% block nextto_sidebar %}
+    <h2>{{user.first_name}}'s active buildings:</h2></br>
+     {% for building in buildings %}
+        {% if building.manager == user or user.username == 'admin' %}
+           <div class="col-lg-4 col-md-6">
+               <div class="panel panel-primary">
+                   <div class="panel-heading">
+                       <div class="row">
+                           <div class="col-xs-3">
+                               <span style="font-size: 40px" class="glyphicon glyphicon-tasks 5x"></span></br>
+                           </div>
+                           <div class="col-xs-9 text-right">
+                                <div style="font-size: 40px">{{ building.number }}</div>
+                                <div>{{ building.name }}</div>
+                           </div>
+                       </div>
+                   </div>
+                   <a href="#">
+                       <div class="panel-footer">
+                           <span class="pull-left">View Details</span>
+                           <span class="pull-right"><i class="glyphicon glyphicon-chevron-right"></i></span>
+                           <div class="clearfix"></div>
+                       </div>
+                   </a>
+               </div>
+           </div>
+        {% endif %}
+     {% endfor %}
 {% endblock %}

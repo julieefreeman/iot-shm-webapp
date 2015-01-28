@@ -52,28 +52,28 @@ def user_login(request):
     else:
         return render_to_response('iotshm_dashboard/login.html', {}, context)
 
-# currently not implementing the register functionality
-# the admin must create users and their buildings through the admin portal
-def register(request):
-    context = RequestContext(request)
-
-    registered = False
-
-    if request.method == 'POST':
-
-        user_form = UserForm(data=request.POST)
-        if user_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-            registered = True
-
-        else:
-            print(user_form.errors)
-
-    else:
-        user_form = UserForm()
-    return render_to_response(
-        'iotshm_dashboard/register.html',
-            {'user_form': user_form, 'registered': registered},
-            context)
+# # currently not implementing the register functionality
+# # the admin must create users and their buildings through the admin portal
+# def register(request):
+#     context = RequestContext(request)
+#
+#     registered = False
+#
+#     if request.method == 'POST':
+#
+#         user_form = UserForm(data=request.POST)
+#         if user_form.is_valid():
+#             user = user_form.save()
+#             user.set_password(user.password)
+#             user.save()
+#             registered = True
+#
+#         else:
+#             print(user_form.errors)
+#
+#     else:
+#         user_form = UserForm()
+#     return render_to_response(
+#         'iotshm_dashboard/register.html',
+#             {'user_form': user_form, 'registered': registered},
+#             context)

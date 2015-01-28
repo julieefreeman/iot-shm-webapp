@@ -1,0 +1,50 @@
+{% load bootstrap3 %}
+{% bootstrap_javascript %}
+{% bootstrap_css %}
+
+{#<head align="center">#}
+{#    <title align="center">IoT SHM - {% block title %}Dashboard{% endblock %}</title>#}
+{#</head>#}
+
+<body class="page-container"  style="background-image:url('{{ STATIC_URL }}tower.jpeg');background-repeat:no-repeat;background-size: cover">
+    <style>
+        body {
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+{#        select {#}
+{#            style: 'btn-info';#}
+{#            size: 4;#}
+{#        }#}
+    </style>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                    <a class="navbar-brand" href="/iotshm/">IoT SHM</a>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/iotshm/">Home</a></li>
+                    {% if user.is_authenticated %}
+{#                        <li><a href="/iotshm/dashboard/">Dashboard</a></li>#}
+                        <li><a href="/iotshm/logout/">Logout</a></li>
+                    {% else %}
+                        <li><a href="/iotshm/login/">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% block inside_headerfooter %}{% endblock %}
+    <div align="center" class="navbar navbar-inverse navbar-fixed-bottom">
+        </br><a align="left" href="/iotshm/contactus/" style="color:white">Contact Us</a>
+        <p style="display:inline; color:gray">   |   </p>
+        <a align="right" href="/iotshm/aboutiotshm/" style="color:white">About IoT-SHM</a>
+    </div>
+</body>
