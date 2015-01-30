@@ -4,9 +4,9 @@
 {% bootstrap_javascript %}
 
 {% block building_links %}
-    <a type="button" class="list-group-item" href="my_buildings/">My Buildings</a>
+    <a type="button" class="list-group-item" href="">My Buildings</a>
     {% for building in buildings %}
-        <a href="{{ building.number }}/" class="list-group-item">Building #{{ building.number }}
+        <a href="../{{ building.number }}/" class="list-group-item">Building #{{ building.number }}
             <span class="pull-right glyphicon glyphicon-chevron-right"></span>
         </a>
     {% endfor %}
@@ -14,11 +14,11 @@
 
 {% block nextto_sidebar %}
     <div class="col-md-9 col-md-offset-1 col-sm-8">
-        <h2>{{user.first_name}}'s Active Buildings:</h2></br>
+        <h2>Building Details:</h2></br>
          {% for building in buildings %}
             {% if building.manager == user or user.username == 'admin' %}
                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6">
-                   <div class="panel panel-primary">
+                   <div class="panel panel-default">
                        <div class="panel-heading">
                            <div class="row">
                                <div class="col-xs-3">
@@ -28,15 +28,20 @@
                                     <div style="font-size: 40px">{{ building.number }}</div>
                                     <div>{{ building.name }}</div>
                                </div>
+                               <div class="col-xs-10">
+                                   </br><div style="font-size: 20px">{{ building.address }}</div>
+                                   <div style="font-size: 20px">{{ building.city }}, {{ building.state }}</div>
+                                   <div style="font-size: 20px">{{ building.zipcode }}</div>
+                               </div>
                            </div>
                        </div>
-                       <a href="{{ building.number }}/">
-                           <div class="panel-footer">
-                               <span class="pull-left">View Details</span>
-                               <span class="pull-right"><i class="glyphicon glyphicon-chevron-right"></i></span>
-                               <div class="clearfix"></div>
-                           </div>
-                       </a>
+{#                       <a href="{{ building.number }}/">#}
+{#                           <div class="panel-footer">#}
+{#                               <span class="pull-left">View Details</span>#}
+{#                               <span class="pull-right"><i class="glyphicon glyphicon-chevron-right"></i></span>#}
+{#                               <div class="clearfix"></div>#}
+{#                           </div>#}
+{#                       </a>#}
                    </div>
                </div>
             {% endif %}

@@ -23,11 +23,39 @@ def contact(request):
 @login_required
 def dashboard(request):
     context = RequestContext(request)
-    data = {'buildings':Building.objects.all()}
+    data = {'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/dashboard.html', data, context)
 
 @login_required
+def real_time(request, building_num):
+    context = RequestContext(request)
+    data = {'curr_building':Building.objects.get(number=building_num),
+            'all_buildings':Building.objects.filter(manager=request.user)}
+    return render_to_response('iotshm_dashboard/real_time.html', data, context)
+
+@login_required
+def long_term(request, building_num):
+    context = RequestContext(request)
+    data = {'curr_building':Building.objects.get(number=building_num),
+            'all_buildings':Building.objects.filter(manager=request.user)}
+    return render_to_response('iotshm_dashboard/long_term.html', data, context)
+
+@login_required
+def building_info(request, building_num):
+    context = RequestContext(request)
+    data = {'curr_building':Building.objects.get(number=building_num),
+            'all_buildings':Building.objects.filter(manager=request.user)}
+    return render_to_response('iotshm_dashboard/building_info.html', data, context)
+
+@login_required
+def my_buildings(request):
+    context = RequestContext(request)
+    data = {'buildings':Building.objects.filter(manager=request.user)}
+    return render_to_response('iotshm_dashboard/my_buildings.html', data, context)
+
+@login_required
 def change_password(request):
+    data = {'buildings':Building.objects.filter(manager=request.user)}
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -46,7 +74,7 @@ def change_password(request):
             print("Invalid current password")
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render_to_response('registration/change_password.html', {}, context)
+        return render_to_response('registration/change_password.html', data, context)
 
 @login_required
 def change_password_complete(request):
