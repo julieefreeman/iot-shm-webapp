@@ -3,23 +3,6 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
-{% block building_links %}
-    <a type="button" class="list-group-item" href="../../my_buildings/">My Buildings</a>
-    {% for building in all_buildings %}
-        {% if building == curr_building %}
-            <a href="../" class="list-group-item active">Building #{{ curr_building.number }}
-                <span class="pull-right glyphicon glyphicon-chevron-down"></span>
-            </a>
-            <a class="list-group-item" href="">Real Time Analysis</a>
-            <a class="list-group-item" href="../long_term/">Long Term Trends</a>
-        {% else %}
-            <a href="../../{{ building.number }}/" class="list-group-item">Building #{{ building.number }}
-                <span class="pull-right glyphicon glyphicon-chevron-right"></span>
-            </a>
-        {% endif %}
-    {% endfor %}
-{% endblock %}
-
 {% block nextto_sidebar %}
     <div class="col-md-9 col-md-offset-1 col-sm-8">
         <h2>{{curr_building.name}} Real Time</h2></br>

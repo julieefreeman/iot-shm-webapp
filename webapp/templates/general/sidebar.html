@@ -4,7 +4,7 @@
 {% bootstrap_javascript %}
 
 {% block inside_headerfooter %}
-    <div class="col-lg-2 col-md-3 col-sm-3 sidebar-nav">
+    <div class="col-lg-2 col-md-3 col-sm-4 sidebar-nav">
       <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
@@ -15,20 +15,59 @@
           </button>
           <span class="visible-xs navbar-brand">Navigate</span>
         </div>
-        <div class="navbar-collapse collapse sidebar-navbar-collapse">
-          <ul class="nav navbar-nav">
-              <p></p>
-              <div class="list-group">
-                  <a class="list-group-item" href="/iotshm/dashboard">Dashboard</a>
-                  {% block building_links %} {% endblock %}
-                  <a type="button"  href="#" class="list-group-item disabled">Account</a>
-                  <a class="list-group-item" href="/iotshm/change_password">Change Password</a>
-              </div>
-          </ul>
+        <div class="sidebar navbar-collapse collapse sidebar-navbar-collapse">
+          <p></p>
+          <div class="list-group">
+              {% url 'iotshm_dashboard:dashboard' as dashboard %}
+              {% url 'iotshm_dashboard:change_password' as change_password %}
+              {% url 'iotshm_dashboard:my_buildings' as my_buildings %}
+              <a {#Dashboard#}
+                  class="list-group-item{% if request.path == dashboard %} active{% endif %}"
+                  href="{{ dashboard }}">Dashboard
+              </a>
+              <a type="button" {#My Buildings - Details#}
+                  class="list-group-item{% if request.path == my_buildings %} active{% endif %}"
+                  href="{{ my_buildings }}">My Buildings
+              </a>
+              {% for building in buildings %}
+                  {% url 'iotshm_dashboard:real_time' building.number as real_time %}
+                  {% url 'iotshm_dashboard:building_info' building.number as building_info %}
+                  {% url 'iotshm_dashboard:long_term' building.number as long_term %}
+                  <a
+                      class="list-group-item{% if building == curr_building %} active{% endif %}"
+                      href="{{ building_info }}">Building #{{ building.number }}
+                      <span class="pull-right glyphicon glyphicon-chevron-{% if building == curr_building %}down{% else %}right{% endif %}"></span>
+                  </a>
+                  {% if request.path == real_time or request.path == long_term or request.path == building_info %}
+                      {% if building == curr_building %}
+                      <a
+                          class="list-group-item{% if request.path == real_time %} active{% endif %}"
+                          href="{{ real_time }}">Real Time Analysis
+                      </a>
+                      <a
+                          class="list-group-item{% if request.path == long_term %} active{% endif %}"
+                          href="{{ long_term }}">Long Term Trends
+                      </a>
+                      {% endif %}
+                  {% endif %}
+              {% endfor %}
+              <a type="button"  href="" class="list-group-item disabled">Account</a>
+              <a
+                  class="list-group-item{% if request.path == change_password %} active{% endif %}"
+                  href="{{ change_password }}">Change Password
+              </a>
+          </div>
+{#              <p></p>#}
+{#              <div class="list-group">#}
+{#                  <a class="list-group-item" href="/iotshm/dashboard">Dashboard</a>#}
+{#                  {% block building_links %} {% endblock %}#}
+{#                  <a type="button"  href="#" class="list-group-item disabled">Account</a>#}
+{#                  <a class="list-group-item" href="/iotshm/change_password">Change Password</a>#}
+{#              </div>#}
         </div>
       </div>
     </div>
-    <div class="col-lg-10 col-md-9 col-sm-9" style="height:100%;background-color:rgba(255, 255, 255, 0.5)">
+    <div class="col-lg-10 col-md-9 col-sm-8" style="height:100%;background-color:rgba(255, 255, 255, 0.5)">
         {% block nextto_sidebar %}{% endblock %}
     </div>
 {% endblock %}

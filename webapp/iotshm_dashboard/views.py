@@ -30,21 +30,21 @@ def dashboard(request):
 def real_time(request, building_num):
     context = RequestContext(request)
     data = {'curr_building':Building.objects.get(number=building_num),
-            'all_buildings':Building.objects.filter(manager=request.user)}
+            'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/real_time.html', data, context)
 
 @login_required
 def long_term(request, building_num):
     context = RequestContext(request)
     data = {'curr_building':Building.objects.get(number=building_num),
-            'all_buildings':Building.objects.filter(manager=request.user)}
+            'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/long_term.html', data, context)
 
 @login_required
 def building_info(request, building_num):
     context = RequestContext(request)
     data = {'curr_building':Building.objects.get(number=building_num),
-            'all_buildings':Building.objects.filter(manager=request.user)}
+            'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/building_info.html', data, context)
 
 @login_required

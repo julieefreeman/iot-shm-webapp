@@ -52,6 +52,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+TEMPLATE_CONTEXT_PROCESSORS = TCP + ( 'django.core.context_processors.request', )
+
 # Default settings
 BOOTSTRAP3 = {
     # The URL to the jQuery JavaScript file

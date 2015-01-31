@@ -33,7 +33,7 @@
                     {% if user.is_authenticated %}
                         <li><a href="/iotshm/dashboard/">Home</a></li>
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Welcome, {{ user.first_name }}<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Welcome, {{ user.first_name|capfirst }}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="/iotshm/logout/">Logout</a></li>
                             </ul>
