@@ -132,3 +132,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/iotshm/login/'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'iot.shm@gmail.com'
+EMAIL_HOST_PASSWORD = 'iotshm15'
+EMAIL_USE_TLS = True

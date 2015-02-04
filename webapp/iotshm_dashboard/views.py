@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from iotshm_dashboard.models import Building
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.core.mail import send_mail, BadHeaderError
 
 def index(request):
     context = {}
@@ -19,7 +21,26 @@ def about(request):
 
 def contact(request):
     context = RequestContext(request)
-    return render_to_response('iotshm_dashboard/contact_us.html', {}, context)
+
+    if request.method == 'POST':
+        subject = request.POST['name']+': '+request.POST['email']
+        message = request.POST['message']
+        if subject and message:
+            try:
+                send_mail(subject, message, 'iot.shm@gmail.com', ['iot.shm.helpdesk@gmail.com'])
+            except BadHeaderError:
+                messages.error(request,'Invalid header found.')
+                return render_to_response('iotshm_dashboard/contact_us.html', {}, context)
+            return HttpResponseRedirect('/iotshm/contact/thanks/')
+        else:
+            messages.error(request,'Make sure all fields are entered and valid.')
+            return render_to_response('iotshm_dashboard/contact_us.html', {}, context)
+    else:
+        return render_to_response('iotshm_dashboard/contact_us.html', {}, context)
+
+def contact_thanks(request):
+    context = RequestContext(request)
+    return render_to_response('iotshm_dashboard/contact_thanks.html', {}, context)
 
 @login_required
 def dashboard(request):
@@ -67,7 +88,10 @@ def change_password(request):
 
         if user:
             if new_pass==confirm_pass:
-                user.password = new_pass
+                send_mail('Password successfully changed!', 'Password changed for your IoT-SHM account!', 'iot.shm@gmail.com',[user.email], fail_silently=False)
+                user.set_password(new_pass)
+                user.save()
+                login(request, user)
                 return HttpResponseRedirect('/iotshm/change_password/complete/')
             else:
                 messages.error(request,'New password not confirmed - try again.')
@@ -103,9 +127,9 @@ def user_login(request):
                 login(request, user)
                 return HttpResponseRedirect('/iotshm/dashboard/')
             else:
-                return HttpResponse("Your account is disabled.")
+                messages.error(request,'Your account is disabled.')
         else:
-            print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
+            messages.error(request,'Invalid current password - try again.')
+            return render_to_response('registration/login.html', {}, context)
     else:
         return render_to_response('registration/login.html', {}, context)
