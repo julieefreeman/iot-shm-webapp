@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from iotshm_dashboard.models import Building
+from django.contrib import messages
 
 def index(request):
     context = {}
@@ -69,17 +70,19 @@ def change_password(request):
                 user.password = new_pass
                 return HttpResponseRedirect('/iotshm/change_password/complete/')
             else:
-                return HttpResponse("Confirmation of password failed.")
+                messages.error(request,'New password not confirmed - try again.')
+                return HttpResponseRedirect('/iotshm/change_password/')
         else:
-            print("Invalid current password")
-            return HttpResponse("Invalid login details supplied.")
+            messages.error(request,'Invalid current password - try again.')
+            return HttpResponseRedirect('/iotshm/change_password/')
     else:
         return render_to_response('registration/change_password.html', data, context)
 
 @login_required
 def change_password_complete(request):
     context = RequestContext(request)
-    return render_to_response('registration/change_password_complete.html', {}, context)
+    data = {'buildings': Building.objects.filter(manager=request.user)}
+    return render_to_response('registration/change_password_complete.html', data, context)
 
 @login_required
 def user_logout(request):
