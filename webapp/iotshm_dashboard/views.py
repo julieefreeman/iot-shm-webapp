@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from iotshm_dashboard.models import Building
 from django.contrib import messages
-from django.core.mail import send_mail
 from django.core.mail import send_mail, BadHeaderError
 
 def index(request):
@@ -31,6 +30,8 @@ def contact(request):
             except BadHeaderError:
                 messages.error(request,'Invalid header found.')
                 return render_to_response('iotshm_dashboard/contact_us.html', {}, context)
+            message = 'We have received your concern! We will be getting back to you shortly.'
+            send_mail("IoT SHM - your question received", message, 'iot.shm@gmail.com', [request.user.email])
             return HttpResponseRedirect('/iotshm/contact/thanks/')
         else:
             messages.error(request,'Make sure all fields are entered and valid.')
@@ -45,39 +46,60 @@ def contact_thanks(request):
 @login_required
 def dashboard(request):
     context = RequestContext(request)
-    data = {'buildings':Building.objects.filter(manager=request.user)}
+    if request.user.username == 'admin':
+        data = {'buildings':Building.objects.all()}
+    else:
+        data = {'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/dashboard.html', data, context)
 
 @login_required
 def real_time(request, building_num):
     context = RequestContext(request)
-    data = {'curr_building':Building.objects.get(number=building_num),
-            'buildings':Building.objects.filter(manager=request.user)}
+    if request.user.username == 'admin':
+        data = {'curr_building':Building.objects.get(number=building_num),
+                'buildings':Building.objects.all()}
+    else:
+        data = {'curr_building':Building.objects.get(number=building_num),
+                'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/real_time.html', data, context)
 
 @login_required
 def long_term(request, building_num):
     context = RequestContext(request)
-    data = {'curr_building':Building.objects.get(number=building_num),
-            'buildings':Building.objects.filter(manager=request.user)}
+    if request.user.username == 'admin':
+        data = {'curr_building':Building.objects.get(number=building_num),
+                'buildings':Building.objects.all()}
+    else:
+        data = {'curr_building':Building.objects.get(number=building_num),
+                'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/long_term.html', data, context)
 
 @login_required
 def building_info(request, building_num):
     context = RequestContext(request)
-    data = {'curr_building':Building.objects.get(number=building_num),
-            'buildings':Building.objects.filter(manager=request.user)}
+    if request.user.username == 'admin':
+        data = {'curr_building':Building.objects.get(number=building_num),
+                'buildings':Building.objects.all()}
+    else:
+        data = {'curr_building':Building.objects.get(number=building_num),
+                'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/building_info.html', data, context)
 
 @login_required
 def my_buildings(request):
     context = RequestContext(request)
-    data = {'buildings':Building.objects.filter(manager=request.user)}
+    if request.user.username == 'admin':
+        data = {'buildings':Building.objects.all()}
+    else:
+        data = {'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/my_buildings.html', data, context)
 
 @login_required
 def change_password(request):
-    data = {'buildings':Building.objects.filter(manager=request.user)}
+    if request.user.username == 'admin':
+        data = {'buildings':Building.objects.all()}
+    else:
+        data = {'buildings':Building.objects.filter(manager=request.user)}
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -105,7 +127,10 @@ def change_password(request):
 @login_required
 def change_password_complete(request):
     context = RequestContext(request)
-    data = {'buildings': Building.objects.filter(manager=request.user)}
+    if request.user.username == 'admin':
+        data = {'buildings':Building.objects.all()}
+    else:
+        data = {'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('registration/change_password_complete.html', data, context)
 
 @login_required

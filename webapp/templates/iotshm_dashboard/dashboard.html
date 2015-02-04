@@ -6,7 +6,7 @@
 {% block nextto_sidebar %}
     <h2>{{user.first_name}}'s Active Buildings:</h2></br>
      {% for building in buildings %}
-        {% if building.manager == user or user.username == 'admin' %}
+{#        {% if building.manager == user or user.username == 'admin' %}#}
            <div class="col-lg-4 col-md-4 col-sm-6">
                <div class="panel panel-primary">
                    <div class="panel-heading">
@@ -29,6 +29,6 @@
                    </a>
                </div>
            </div>
-        {% endif %}
+{#        {% endif %}#}
      {% endfor %}
 {% endblock %}
