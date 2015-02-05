@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d8adc1f4-2593-41d3-bf47-0a33a328ed1f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/iotshm_dashboard/contact_us.html" afterPath="$PROJECT_DIR$/templates/iotshm_dashboard/contact_us.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/iotshm_dashboard/dashboard.html" afterPath="$PROJECT_DIR$/templates/iotshm_dashboard/dashboard.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/general/header_footer.html" afterPath="$PROJECT_DIR$/templates/general/header_footer.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/iotshm_dashboard/views.py" afterPath="$PROJECT_DIR$/iotshm_dashboard/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="d8adc1f4-2593-41d3-bf47-0a33a328ed1f" name="Default" comment="" />
     <ignored path="webapp.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -49,8 +42,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/iotshm_dashboard/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4225352" vertical-offset="0" max-vertical-offset="2475">
-              <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.3802817" vertical-offset="0" max-vertical-offset="2475">
+              <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
               <folding>
                 <element signature="e#26#69#0" expanded="true" />
               </folding>
@@ -650,7 +643,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="164" y="23" width="1276" height="833" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
@@ -1092,8 +1085,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/iotshm_dashboard/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4225352" vertical-offset="0" max-vertical-offset="2475">
-          <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.3802817" vertical-offset="0" max-vertical-offset="2475">
+          <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
           <folding>
             <element signature="e#26#69#0" expanded="true" />
           </folding>
