@@ -110,6 +110,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'data': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'iotshm',
+        'USER': 'iotshm',
+        'PASSWORD': 'pa$$word',
+        'HOST': 'iotshm-data.ck3sx5qm0blx.us-west-2.rds.amazonaws.com',
+        'PORT': '3306'
     }
 }
 
