@@ -35,6 +35,7 @@
                   {% url 'iotshm_dashboard:long_term' building.number as long_term %}
                   <a
                       class="list-group-item{% if building == curr_building %} active{% endif %}"
+                      {% if building == curr_building %}id = "active_building"{% endif %} value="{{ curr_building.number }}"
                       href="{{ building_info }}">Building #{{ building.number }}
                       <span class="pull-right glyphicon glyphicon-chevron-{% if building == curr_building %}down{% else %}right{% endif %}"></span>
                   </a>

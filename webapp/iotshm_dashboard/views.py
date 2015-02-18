@@ -6,9 +6,11 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from iotshm_dashboard.models import Building
+from iotshm_dashboard.models import Building, Sensor
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
+from django.contrib.auth.models import User
+import json
 
 def index(request):
     context = {}
@@ -55,13 +57,17 @@ def dashboard(request):
 @login_required
 def real_time(request, building_num):
     context = RequestContext(request)
+    curr_building = Building.objects.get(number=building_num)
     if request.user.username == 'admin':
-        data = {'curr_building':Building.objects.get(number=building_num),
+        data = {'sensors':Sensor.objects.filter(building=curr_building),
+                'curr_building':curr_building,
                 'buildings':Building.objects.all()}
     else:
-        data = {'curr_building':Building.objects.get(number=building_num),
+        data = {'sensors':Sensor.objects.filter(building=curr_building),
+                'curr_building':curr_building,
                 'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/real_time.html', data, context)
+
 
 @login_required
 def long_term(request, building_num):
@@ -158,3 +164,15 @@ def user_login(request):
             return render_to_response('registration/login.html', {}, context)
     else:
         return render_to_response('registration/login.html', {}, context)
+
+
+def real_time_ajax(request, building_num):
+    # curr_building = Building.objects.get(number=building_num)
+    # json_response = {'building': {'name': curr_building.name}}
+    json_response = {
+              'id': 'temp-data',
+              'label': 'Temperature',
+              'units': 'C',
+              'list': [{'date': '2013-09-26', 'value': 26}, {'date': '2013-09-27', 'value': 23}] }
+    return HttpResponse(json.dumps(json_response),
+        content_type='application/json')

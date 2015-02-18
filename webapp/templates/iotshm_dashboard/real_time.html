@@ -5,4 +5,9 @@
 
 {% block nextto_sidebar %}
     <h2>{{curr_building.name}} Real Time</h2></br>
+    {% for s in sensors %}
+        <h5>{{ s.building }} Sensor {{ s.id }}</h5>
+    {% endfor %}
+    <canvas id="myChart" width="500" height="300"></canvas>
+    <button type="button" class="btn btn-default" id="thisbutton"><span>CLICK ME</span></button>
 {% endblock %}

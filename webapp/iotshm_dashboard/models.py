@@ -24,12 +24,12 @@ class Sensor(models.Model):
     def __str__(self):
         return "#%d (%s)" % (self.id, self.building.name)
 
-# class DataPoint(models.Model): # in RDS database - not locally stored
-#     id = models.IntegerField(primary_key=True)  # AutoField?
-#     sensorid = models.ForeignKey('Sensor', db_column='sensorId')  # Field name made lowercase.
-#     value = models.FloatField()
-#     healthy = models.CharField(max_length=45)
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'Data'
+class DataPoint(models.Model): # in RDS database - not locally stored
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    sensorid = models.ForeignKey('Sensor', db_column='sensorId')  # Field name made lowercase.
+    value = models.FloatField()
+    healthy = models.CharField(max_length=45)
+
+    class Meta:
+        managed = False
+        db_table = 'Data'

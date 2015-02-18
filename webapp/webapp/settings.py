@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'localflavor',
     'django.contrib.staticfiles',
     'iotshm_dashboard',
-    'bootstrap3'
+    'bootstrap3',
+    'wq.app'
 )
 
 MIDDLEWARE_CLASSES = (
