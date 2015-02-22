@@ -11,6 +11,8 @@ from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.models import User
 import json
+from datetime import datetime, timedelta
+from random import randint
 
 def index(request):
     context = {}
@@ -166,13 +168,19 @@ def user_login(request):
         return render_to_response('registration/login.html', {}, context)
 
 
-def real_time_ajax(request, building_num):
-    # curr_building = Building.objects.get(number=building_num)
+def real_time_ajax(request,building_num):
+    curr_building = Building.objects.get(number=building_num)
     # json_response = {'building': {'name': curr_building.name}}
-    json_response = {
-              'id': 'temp-data',
-              'label': 'Temperature',
-              'units': 'C',
-              'list': [{'date': '2013-09-26', 'value': 26}, {'date': '2013-09-27', 'value': 23}] }
+    json_response ={Sensor.objects.filter(building=curr_building)[0].id: {
+              "data": [
+                  {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
+                  {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
+                  {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] },
+              Sensor.objects.filter(building=curr_building)[1].id : {
+              "data": [
+                  {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
+                  {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
+                  {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] }
+              }
     return HttpResponse(json.dumps(json_response),
         content_type='application/json')

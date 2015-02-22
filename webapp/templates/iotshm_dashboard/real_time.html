@@ -2,12 +2,19 @@
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load static %}
 
 {% block nextto_sidebar %}
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="{% static "js/realtime_graph.js" %}"></script>
+
     <h2>{{curr_building.name}} Real Time</h2></br>
     {% for s in sensors %}
         <h5>{{ s.building }} Sensor {{ s.id }}</h5>
     {% endfor %}
-    <canvas id="myChart" width="500" height="300"></canvas>
-    <button type="button" class="btn btn-default" id="thisbutton"><span>CLICK ME</span></button>
+    <div id="testing">
+    <h2>nananana</h2>
+    </div>
+    <div id="real-time-chart" style="min-width: 310px; margin: 0 auto"></div>
 {% endblock %}
