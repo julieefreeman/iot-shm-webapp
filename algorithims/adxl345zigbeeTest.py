@@ -6,10 +6,11 @@ def adxl345Test():
 	currTime = startTime
 	print(startTime)
 	print(currTime)
-	ser = serial.Serial('/dev/ttyAMA0', 9600)
+	ser = serial.Serial('/dev/ttyUSB0', 9600)
 	while(currTime - startTime < 50):
 		currTime = time.time()
-		reading = ser.readline()
+		reading = str(ser.readline())
+		#print(reading)
 		print(reading[:len(reading)-2] + "," + str(currTime) + "\n")
 	ser.close()
 if(__name__ == "__main__"):
