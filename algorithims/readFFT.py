@@ -27,7 +27,7 @@ def create_mag_array(four_array, fft_size):
         array_mag=np.vstack((array_mag, array_mag_i))
     return array_mag
 
-fft_size=1024
+fft_size=64
 fs=92
 
 USERNAME = 'iotshm'
