@@ -8,10 +8,10 @@ $(document).ready(function() {
               }
           },
           title: {
-              text: 'Live chart'
+              text: 'Live Data'
           },
           subtitle: {
-              text: 'Irregular data in Highcharts JS'
+              text: 'Most recent results for this building'
           },
           xAxis: {
               type: 'datetime',
@@ -25,7 +25,7 @@ $(document).ready(function() {
           },
           yAxis: {
               title: {
-                  text: 'Means nothing'
+                  text: 'Magnitude'
               },
               min: 0
           },
@@ -41,7 +41,7 @@ $(document).ready(function() {
               }
           },
             series: [{
-                name: 'Random data',
+                name: 'Frequency',
                 data: []
             }]
       });
@@ -62,7 +62,7 @@ function executeRealTimeQuery() {
           updateRealTimeChart(data);
         },
       error: function(data){
-          $("#testing").append("<h2>error: "+data.responseText+"</h2>");
+          $("#debugging").append("<h2>error: "+data.responseText+"</h2>");
         }
     });
 }
@@ -74,9 +74,9 @@ function updateRealTimeChart(json) {
             var chart = $('#real-time-chart').highcharts();
             var series = chart.series[index];
             var shift = series.data.length > 50;
-            //$("#testing").append("<h2>time: " + value['time'] + "</h2>");
-            //$("#testing").append("<h2>value: " + value['value'] + "</h2>");
-            //$("#testing").append("<h2>shift: " + shift + "</h2>");
+            //$("#debugging").append("<h2>time: " + value['time'] + "</h2>");
+            //$("#debugging").append("<h2>value: " + value['value'] + "</h2>");
+            //$("#debugging").append("<h2>shift: " + shift + "</h2>");
             chart.series[index].addPoint([value['time'],value['value']],true,shift)
         });
         index++;

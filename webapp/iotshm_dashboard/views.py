@@ -6,13 +6,15 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from iotshm_dashboard.models import Building, Sensor
+from iotshm_dashboard.models import Building, HealthScore, Magnitude, SensorRDS
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.models import User
 import json
 from datetime import datetime, timedelta
 from random import randint
+from django.utils import timezone
+from django.utils.timezone import get_current_timezone, make_aware, utc
 
 def index(request):
     context = {}
@@ -61,11 +63,11 @@ def real_time(request, building_num):
     context = RequestContext(request)
     curr_building = Building.objects.get(number=building_num)
     if request.user.username == 'admin':
-        data = {'sensors':Sensor.objects.filter(building=curr_building),
+        data = {'sensors':SensorRDS.objects.using('data').filter(building_id=building_num),
                 'curr_building':curr_building,
                 'buildings':Building.objects.all()}
     else:
-        data = {'sensors':Sensor.objects.filter(building=curr_building),
+        data = {'sensors':SensorRDS.objects.using('data').filter(building_id=building_num),
                 'curr_building':curr_building,
                 'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/real_time.html', data, context)
@@ -169,18 +171,42 @@ def user_login(request):
 
 
 def real_time_ajax(request,building_num):
-    curr_building = Building.objects.get(number=building_num)
-    # json_response = {'building': {'name': curr_building.name}}
-    json_response ={Sensor.objects.filter(building=curr_building)[0].id: {
-              "data": [
-                  {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
-                  {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
-                  {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] },
-              Sensor.objects.filter(building=curr_building)[1].id : {
-              "data": [
-                  {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
-                  {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
-                  {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] }
-              }
+    curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
+    curr_building_sensors = [str(s.id) for s in curr_building_sensors]
+    ts = HealthScore.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp')[0].timestamp
+    magnitudes = Magnitude.objects.using('data').filter(timestamp=make_aware(ts,utc))
+    json_response = {}
+    for m in magnitudes:
+        if m.sensor_id in curr_building_sensors:
+            if not m.sensor_id in json_response:
+                json_response[m.sensor_id] = {"x_data": [], "y_data": [], "z_data": []}
+            json_response[m.sensor_id]["x_data"].append({"frequency": m.frequency,"x_magnitude": m.x_magnitude})
+            json_response[m.sensor_id]["y_data"].append({"frequency": m.frequency,"y_magnitude": m.y_magnitude})
+            json_response[m.sensor_id]["z_data"].append({"frequency": m.frequency,"z_magnitude": m.z_magnitude})
+
+    # json_response ={SensorRDS.objects.using('data').filter(building_id=building_num)[0].id: {
+    #           "data": [
+    #               {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] },
+    #           SensorRDS.objects.using('data').filter(building_id=building_num)[1].id : {
+    #           "data": [
+    #               {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] }
+    #           }
+
     return HttpResponse(json.dumps(json_response),
         content_type='application/json')
+
+@login_required
+def sensors(request,building_num):
+    context = RequestContext(request)
+    data = {'curr_building': Building.objects.get(number=building_num),
+            'buildings': Building.objects.filter(manager=request.user),
+            'sensors': SensorRDS.objects.using('data').filter(building_id=building_num)}
+
+    if request.method == 'POST':
+        return render_to_response('iotshm_dashboard/sensors.html', {}, context)
+    else:
+        return render_to_response('iotshm_dashboard/sensors.html', data, context)
