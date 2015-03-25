@@ -170,7 +170,65 @@ def user_login(request):
         return render_to_response('registration/login.html', {}, context)
 
 
-def real_time_ajax(request,building_num):
+def real_time_ajax_x(request,building_num):
+    curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
+    curr_building_sensors = [str(s.id) for s in curr_building_sensors]
+    ts = HealthScore.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp')[0].timestamp
+    magnitudes = Magnitude.objects.using('data').filter(timestamp=make_aware(ts,utc))
+    json_response = {}
+    for m in magnitudes:
+        if m.sensor_id in curr_building_sensors:
+            if not m.sensor_id in json_response:
+                json_response[m.sensor_id] = {"x_data": [], "y_data": [], "z_data": []}
+            json_response[m.sensor_id]["x_data"].append({"frequency": m.frequency,"x_magnitude": m.x_magnitude})
+            json_response[m.sensor_id]["y_data"].append({"frequency": m.frequency,"y_magnitude": m.y_magnitude})
+            json_response[m.sensor_id]["z_data"].append({"frequency": m.frequency,"z_magnitude": m.z_magnitude})
+
+    # json_response ={SensorRDS.objects.using('data').filter(building_id=building_num)[0].id: {
+    #           "data": [
+    #               {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] },
+    #           SensorRDS.objects.using('data').filter(building_id=building_num)[1].id : {
+    #           "data": [
+    #               {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] }
+    #           }
+
+    return HttpResponse(json.dumps(json_response),
+        content_type='application/json')
+
+def real_time_ajax_y(request,building_num):
+    curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
+    curr_building_sensors = [str(s.id) for s in curr_building_sensors]
+    ts = HealthScore.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp')[0].timestamp
+    magnitudes = Magnitude.objects.using('data').filter(timestamp=make_aware(ts,utc))
+    json_response = {}
+    for m in magnitudes:
+        if m.sensor_id in curr_building_sensors:
+            if not m.sensor_id in json_response:
+                json_response[m.sensor_id] = {"x_data": [], "y_data": [], "z_data": []}
+            json_response[m.sensor_id]["x_data"].append({"frequency": m.frequency,"x_magnitude": m.x_magnitude})
+            json_response[m.sensor_id]["y_data"].append({"frequency": m.frequency,"y_magnitude": m.y_magnitude})
+            json_response[m.sensor_id]["z_data"].append({"frequency": m.frequency,"z_magnitude": m.z_magnitude})
+
+    # json_response ={SensorRDS.objects.using('data').filter(building_id=building_num)[0].id: {
+    #           "data": [
+    #               {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] },
+    #           SensorRDS.objects.using('data').filter(building_id=building_num)[1].id : {
+    #           "data": [
+    #               {"time": str(datetime.now() + timedelta(seconds=-6)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-5)), "value": randint(0,20)},
+    #               {"time": str(datetime.now() + timedelta(seconds=-4)), "value": randint(0,20)}] }
+    #           }
+
+    return HttpResponse(json.dumps(json_response),
+        content_type='application/json')
+
+def real_time_ajax_z(request,building_num):
     curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
     ts = HealthScore.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp')[0].timestamp

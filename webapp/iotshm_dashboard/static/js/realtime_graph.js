@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    if ($("#real-time-chart-x").length) {
+    if (!$("#xcollapse").hasClass('collapsed')) {
         $('#real-time-chart-x').highcharts({
           chart: {
               type: 'spline',
@@ -45,6 +45,12 @@ $(document).ready(function() {
                 data: []
             }]
       });
+        real_interval_x = setInterval(executeRealTimeQueryX, 1000);
+    }
+    else {
+        clearInterval(real_interval_x);
+    }
+    if (!$("#ycollapse").hasClass('collapsed')) {
         $('#real-time-chart-y').highcharts({
           chart: {
               type: 'spline',
@@ -90,15 +96,21 @@ $(document).ready(function() {
                 data: []
             }]
       });
+        real_interval_y = setInterval(executeRealTimeQueryY, 1000);
+    }
+    else {
+        clearInterval(real_interval_y);
+    }
+    if (!$("#zcollapse").hasClass('collapsed')) {
         $('#real-time-chart-z').highcharts({
           chart: {
               type: 'spline',
               events: {
-                load: executeRealTimeQueryZ
+                load: executeRealTimeQueryY
               }
           },
           title: {
-              text: 'Z Magnitude vs Frequency'
+              text: 'Y Magnitude vs Frequency'
           },
           subtitle: {
               text: 'Most recent results for this building'
@@ -135,20 +147,16 @@ $(document).ready(function() {
                 data: []
             }]
       });
-        real_interval_x = setInterval(executeRealTimeQueryX, 1000);
-        real_interval_y = setInterval(executeRealTimeQueryY, 1000);
         real_interval_z = setInterval(executeRealTimeQueryZ, 1000);
     }
     else {
-        clearInterval(real_interval_x);
-        clearInterval(real_interval_y);
         clearInterval(real_interval_z);
     }
 });
 
 function executeRealTimeQueryX() {
   $.ajax({
-      url: '/iotshm/real_time_ajax/'+$('a[id=active_building]').attr("value"),
+      url: '/iotshm/real_time_ajax_x/'+$('a[id=active_building]').attr("value"),
       type: 'get',
       dataType: 'json',
       //data: $('a[id=active_building]').attr("value"),
@@ -179,7 +187,7 @@ function updateRealTimeChartX(json) {
 
 function executeRealTimeQueryY() {
   $.ajax({
-      url: '/iotshm/real_time_ajax/'+$('a[id=active_building]').attr("value"),
+      url: '/iotshm/real_time_ajax_y/'+$('a[id=active_building]').attr("value"),
       type: 'get',
       dataType: 'json',
       //data: $('a[id=active_building]').attr("value"),
@@ -210,7 +218,7 @@ function updateRealTimeChartY(json) {
 
 function executeRealTimeQueryZ() {
   $.ajax({
-      url: '/iotshm/real_time_ajax/'+$('a[id=active_building]').attr("value"),
+      url: '/iotshm/real_time_ajax_z/'+$('a[id=active_building]').attr("value"),
       type: 'get',
       dataType: 'json',
       //data: $('a[id=active_building]').attr("value"),
