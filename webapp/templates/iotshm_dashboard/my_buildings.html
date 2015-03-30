@@ -4,7 +4,7 @@
 {% bootstrap_javascript %}
 
 {% block nextto_sidebar %}
-    <h2>Building Details:</h2></br>
+    <h2 xmlns="http://www.w3.org/1999/html">Building Details:</h2></br>
      {% for building in buildings %}
         {% if building.manager == user or user.username == 'admin' %}
            <div class="col-lg-4 col-md-6 col-sm-6">
@@ -18,10 +18,14 @@
                                 <div style="font-size: 40px">{{ building.number }}</div>
                                 <div>{{ building.name }}</div>
                            </div>
-                           <div class="col-xs-10">
+                           <div class="col-xs-8">
                                </br><div style="font-size: 20px">{{ building.address }}</div>
                                <div style="font-size: 20px">{{ building.city }}, {{ building.state }}</div>
                                <div style="font-size: 20px">{{ building.zipcode }}</div>
+                           </div>
+                           <div class="col-xs-4 pull-right">
+                               </br></br></br></br>
+                               <div class="panel panel-success text-center" style="color: green;font-size: 20px">Healthy</div>
                            </div>
                        </div>
                    </div>
