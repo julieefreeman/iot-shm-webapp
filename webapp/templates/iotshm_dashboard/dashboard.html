@@ -9,16 +9,19 @@
 {#        {% if building.manager == user or user.username == 'admin' %}#}
            <div class="col-lg-4 col-md-4 col-sm-6">
                <div class="panel panel-success">
+{#               <div class="panel panel-primary">#}
+{#               <div class="panel panel-danger">#}
                    <div class="panel-heading">
                        <div class="row">
                            <div class="col-xs-3">
-                               <span style="font-size: 40px" class="glyphicon glyphicon-tasks 5x"></span></br>
+                               <span style="font-size: 40px" class="glyphicon glyphicon-tasks 5x"></span></br></br>
+                               <div style="font-size: 20px">Healthy</div>
+{#                               <div style="font-size: 20px">Unhealthy</div>#}
                            </div>
                            <div class="col-xs-9 text-right">
                                 <div style="font-size: 40px">{{ building.number }}</div>
                                 <div>{{ building.name }}</div>
                            </div>
-                           <div style="font-size: 20px">Healthy</div>
                        </div>
                    </div>
                    <a href="{{ building.number }}/">
