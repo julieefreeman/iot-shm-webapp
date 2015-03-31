@@ -9,14 +9,19 @@
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
     <script src="{% static "js/realtime_graph.js" %}"></script>
 
-    <h2>{{curr_building.name}} Real Time</h2></br>
 {#    {% for s in sensors %}#}
 {#        <h5>{{ s.building }} Sensor {{ s.id }}</h5>#}
 {#    {% endfor %}#}
     <div id="debugging"></div>
-{#    <div class="col-md-12 col-sm-12">#}
+    <div class="col-md-2">
+        </br></br>
+        <div class="panel text-center" style="background-color: limegreen; color: white; font-size: 35px;">Healthy</div>
+        <div class="panel text-center" style="background-color: darkred; color: white; font-size: 35px;">Unhealthy</div>
+    </div>
+    <div class="col-md-10">
+        </br></br>
         <h4 class="panel-title">
-            <div class="panel-heading" style="background:white">
+            <div class="panel-heading" style="background:#337ab7; color:white">
                 <h5 id="xcollapse" data-toggle="collapse" data-target="#real-time-chart-x" aria-expanded="true">
                    X chart
                 </h5>
@@ -25,7 +30,7 @@
         <div class="collapse in" aria-expanded="true" id="real-time-chart-x" style="border: 2px solid; height: 200px; min-width: 310px; margin: 0 auto"></div>
         </br>
         <h4 class="panel-title">
-            <div class="panel-heading" style="background:white">
+            <div class="panel-heading" style="background:#337ab7; color:white">
                 <h5 id="ycollapse" data-toggle="collapse" data-target="#real-time-chart-y" aria-expanded="true" >
                    Y chart
                 </h5>
@@ -34,7 +39,7 @@
         <div class="collapse in" aria-expanded="true" id="real-time-chart-y" style="border: 2px solid; height: 200px; min-width: 310px; margin: 0 auto"></div>
         </br>
         <h4 class="panel-title">
-            <div class="panel-heading" style="background:white">
+            <div class="panel-heading" style="background:#337ab7; color:white">
                 <h5 id="zcollapse" data-toggle="collapse" data-target="#real-time-chart-z" aria-expanded="true" >
                    Z chart
                 </h5>
@@ -42,5 +47,5 @@
         </h4>
         <div class="collapse in" aria-expanded="true" id="real-time-chart-z" style="border: 2px solid; height: 200px; min-width: 310px; margin: 0 auto"></div>
         </br></br>
-{#    </div>#}
+    </div>
 {% endblock %}

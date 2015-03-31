@@ -37,14 +37,15 @@
                   <a
                       class="list-group-item{% if building == curr_building %} active{% endif %}"
                       {% if building == curr_building %}id = "active_building"{% endif %} value="{{ curr_building.number }}"
-                      href="{{ building_info }}">Building #{{ building.number }}
+{#                      href="{{ building_info }}">Building #{{ building.number }}#}
+                        href="{{ real_time }}">Building #{{ building.number }}
                       <span class="pull-right glyphicon glyphicon-chevron-{% if building == curr_building %}down{% else %}right{% endif %}"></span>
                   </a>
                   {% if request.path == real_time or request.path == long_term or request.path == building_info or request.path == sensors %}
                       {% if building == curr_building %}
                           <a style="font-size:12px"
                               class="list-group-item{% if request.path == real_time %} active{% endif %}"
-                              href="{{ real_time }}">{% bootstrap_icon "play" %}  Real Time Analysis
+                              href="{{ real_time }}">{% bootstrap_icon "play"   %}  Real Time Analysis
                           </a>
                           <a style="font-size:12px"
                               class="list-group-item{% if request.path == long_term %} active{% endif %}"
