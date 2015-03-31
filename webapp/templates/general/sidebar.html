@@ -25,10 +25,10 @@
                   class="list-group-item{% if request.path == dashboard %} active{% endif %}"
                   href="{{ dashboard }}">Dashboard
               </a>
-              <a type="button" {#My Buildings - Details#}
-                  class="list-group-item{% if request.path == my_buildings %} active{% endif %}"
-                  href="{{ my_buildings }}">My Buildings
-              </a>
+{#              <a type="button" {#My Buildings - Details#}
+{#                  class="list-group-item{% if request.path == my_buildings %} active{% endif %}"#}
+{#                  href="{{ my_buildings }}">My Buildings#}
+{#              </a>#}
               {% for building in buildings %}
                   {% url 'iotshm_dashboard:real_time' building.number as real_time %}
                   {% url 'iotshm_dashboard:building_info' building.number as building_info %}
