@@ -14,20 +14,11 @@ $(document).ready(function() {
               text: 'Most recent results for this building'
           },
           xAxis: {
-              type: 'datetime',
-              dateTimeLabelFormats: { // don't display the dummy year
-                  month: '%e. %b',
-                  year: '%b'
-              },
-              title: {
-                  text: 'Date'
-              }
           },
           yAxis: {
               title: {
                   text: 'Magnitude'
-              },
-              min: 0
+              }
           },
           tooltip: {
               headerFormat: '<b>{series.name}</b><br>',
@@ -65,20 +56,11 @@ $(document).ready(function() {
               text: 'Most recent results for this building'
           },
           xAxis: {
-              type: 'datetime',
-              dateTimeLabelFormats: { // don't display the dummy year
-                  month: '%e. %b',
-                  year: '%b'
-              },
-              title: {
-                  text: 'Date'
-              }
           },
           yAxis: {
               title: {
                   text: 'Magnitude'
-              },
-              min: 0
+              }
           },
           tooltip: {
               headerFormat: '<b>{series.name}</b><br>',
@@ -110,26 +92,17 @@ $(document).ready(function() {
               }
           },
           title: {
-              text: 'Y Magnitude vs Frequency'
+              text: 'Z Magnitude vs Frequency'
           },
           subtitle: {
               text: 'Most recent results for this building'
           },
           xAxis: {
-              type: 'datetime',
-              dateTimeLabelFormats: { // don't display the dummy year
-                  month: '%e. %b',
-                  year: '%b'
-              },
-              title: {
-                  text: 'Date'
-              }
           },
           yAxis: {
               title: {
                   text: 'Magnitude'
-              },
-              min: 0
+              }
           },
           tooltip: {
               headerFormat: '<b>{series.name}</b><br>',
@@ -168,18 +141,15 @@ function executeRealTimeQueryX() {
         }
     });
 }
+
 function updateRealTimeChartX(json) {
     var index = 0;
     $.each(json, function (sensor, data) {
-        //$("#testing").append("<h2>value: " + data['data'] + "</h2>");
-        $.each(data['data'], function (key,value) {
+        $.each(data['x_data'], function (key,value) {
             var chart = $('#real-time-chart-x').highcharts();
             var series = chart.series[index];
             var shift = series.data.length > 50;
-            //$("#debugging").append("<h2>time: " + value['time'] + "</h2>");
-            //$("#debugging").append("<h2>value: " + value['value'] + "</h2>");
-            //$("#debugging").append("<h2>shift: " + shift + "</h2>");
-            chart.series[index].addPoint([value['time'],value['value']],true,shift)
+            chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
         });
         index++;
     });
@@ -202,15 +172,11 @@ function executeRealTimeQueryY() {
 function updateRealTimeChartY(json) {
     var index = 0;
     $.each(json, function (sensor, data) {
-        //$("#testing").append("<h2>value: " + data['data'] + "</h2>");
-        $.each(data['data'], function (key,value) {
+        $.each(data['y_data'], function (key,value) {
             var chart = $('#real-time-chart-y').highcharts();
             var series = chart.series[index];
             var shift = series.data.length > 50;
-            //$("#debugging").append("<h2>time: " + value['time'] + "</h2>");
-            //$("#debugging").append("<h2>value: " + value['value'] + "</h2>");
-            //$("#debugging").append("<h2>shift: " + shift + "</h2>");
-            chart.series[index].addPoint([value['time'],value['value']],true,shift)
+            chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
         });
         index++;
     });
@@ -233,15 +199,11 @@ function executeRealTimeQueryZ() {
 function updateRealTimeChartZ(json) {
     var index = 0;
     $.each(json, function (sensor, data) {
-        //$("#testing").append("<h2>value: " + data['data'] + "</h2>");
-        $.each(data['data'], function (key,value) {
+        $.each(data['z_data'], function (key,value) {
             var chart = $('#real-time-chart-z').highcharts();
             var series = chart.series[index];
             var shift = series.data.length > 50;
-            //$("#debugging").append("<h2>time: " + value['time'] + "</h2>");
-            //$("#debugging").append("<h2>value: " + value['value'] + "</h2>");
-            //$("#debugging").append("<h2>shift: " + shift + "</h2>");
-            chart.series[index].addPoint([value['time'],value['value']],true,shift)
+            chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
         });
         index++;
     });

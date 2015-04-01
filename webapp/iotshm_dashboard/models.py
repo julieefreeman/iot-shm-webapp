@@ -48,13 +48,12 @@ class SensorRDS(models.Model): # stored in the remote database
     def __str__(self):
         return "#%s (%d)" % (self.id, self.building_id)
 
-class HealthScore(models.Model): # in RDS database - not locally stored
+class HealthRDS(models.Model): # in RDS database - not locally stored
     # sensor_id = models.ForeignKey('SensorRDS', db_column='id',primary_key=True)  # Field name made lowercase.
     sensor_id = models.CharField(max_length=300, primary_key=True) #foreign key due to the way it's coded
     timestamp = models.DateTimeField(primary_key=True)
-    x_health = models.IntegerField()
-    y_health = models.IntegerField()
-    z_health = models.IntegerField()
+    reading_type = models.IntegerField()
+    healthy = models.IntegerField()
 
     class Meta:
         managed = False
@@ -64,13 +63,12 @@ class HealthScore(models.Model): # in RDS database - not locally stored
     #     x = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime(self.timestamp))
     #     return "%s (%s)" % (self.sensor_id, x)
 
-class Magnitude(models.Model): # in RDS database - not locally stored
+class MagnitudeRDS(models.Model): # in RDS database - not locally stored
     # sensor_id = models.ForeignKey('SensorRDS', db_column='id')  # Field name made lowercase.
     sensor_id = models.CharField(max_length=300) #foreign key due to the way it's coded
     timestamp = models.DateTimeField()
-    x_magnitude = models.FloatField()
-    y_magnitude = models.FloatField()
-    z_magnitude = models.FloatField()
+    value = models.FloatField()
+    reading_type = models.IntegerField()
     frequency = models.FloatField()
     reading_id = models.CharField(max_length=300,primary_key=True)
 
