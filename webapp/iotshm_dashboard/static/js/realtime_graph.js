@@ -145,12 +145,14 @@ function executeRealTimeQueryX() {
 function updateRealTimeChartX(json) {
     var index = 0;
     $.each(json, function (sensor, data) {
-        $.each(data['x_data'], function (key,value) {
-            var chart = $('#real-time-chart-x').highcharts();
-            var series = chart.series[index];
-            var shift = series.data.length > 50;
-            chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
-        });
+        var chart = $('#real-time-chart-x').highcharts();
+        chart.series[index].setData(data['x_data'])
+        //$.each(data['x_data'], function (key,value) {
+        //    var chart = $('#real-time-chart-x').highcharts();
+        //    var series = chart.series[index];
+        //    var shift = series.data.length > 50;
+        //    chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
+        //});
         index++;
     });
 }
