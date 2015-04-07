@@ -185,7 +185,7 @@ def real_time_ajax_x(request,building_num):
                     json_response[m.sensor_id] = {"x_data": []}
                 # json_response[m.sensor_id]["x_data"].append({"frequency": m.frequency,"magnitude": m.value})
                 json_response[m.sensor_id]["x_data"].append([m.frequency,m.value])
-        r = {"data":json_response, "time":ts}
+        r = {"data":json_response, "time":str(ts)}
     return HttpResponse(json.dumps(r), content_type='application/json')
 
 def real_time_ajax_y(request,building_num):
@@ -202,7 +202,7 @@ def real_time_ajax_y(request,building_num):
                     json_response[m.sensor_id] = {"y_data": []}
                 # json_response[m.sensor_id]["y_data"].append({"frequency": m.frequency,"magnitude": m.value})
                 json_response[m.sensor_id]["y_data"].append([m.frequency,m.value])
-        r = {"data":json_response, "time":ts}
+        r = {"data":json_response, "time":str(ts)}
 
     return HttpResponse(json.dumps(json_response), content_type='application/json')
 
@@ -220,7 +220,7 @@ def real_time_ajax_z(request,building_num):
                     json_response[m.sensor_id] = {"z_data": []}
                 # json_response[m.sensor_id]["z_data"].append({"frequency": m.frequency,"magnitude": m.value})
                 json_response[m.sensor_id]["z_data"].append([m.frequency,m.value])
-        r = {"data":json_response, "time":ts}
+        r = {"data":json_response, "time":str(ts)}
 
     return HttpResponse(json.dumps(json_response), content_type='application/json')
 
