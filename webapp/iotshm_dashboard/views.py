@@ -174,43 +174,53 @@ def user_login(request):
 def real_time_ajax_x(request,building_num):
     curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
-    ts = HealthRDS.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp').reverse()[0].timestamp
-    Magnitudes = MagnitudeRDS.objects.using('data').filter(reading_type=0).filter(timestamp=make_aware(ts,utc))
+    timestamps = HealthRDS.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp').reverse()
     json_response = {}
-    for m in Magnitudes:
-        if m.sensor_id in curr_building_sensors:
-            if not m.sensor_id in json_response:
-                json_response[m.sensor_id] = {"x_data": []}
-            #json_response[m.sensor_id]["x_data"].append({"frequency": m.frequency,"magnitude": m.value})
-            json_response[m.sensor_id]["x_data"].append([m.frequency,m.value])
-
-    return HttpResponse(json.dumps(json_response), content_type='application/json')
+    if (timestamps.count() > 0):
+        ts = timestamps[0].timestamp
+        Magnitudes = MagnitudeRDS.objects.using('data').filter(reading_type=0).filter(timestamp=make_aware(ts,utc))
+        for m in Magnitudes:
+            if m.sensor_id in curr_building_sensors:
+                if not m.sensor_id in json_response:
+                    json_response[m.sensor_id] = {"x_data": []}
+                # json_response[m.sensor_id]["x_data"].append({"frequency": m.frequency,"magnitude": m.value})
+                json_response[m.sensor_id]["x_data"].append([m.frequency,m.value])
+        r = {"data":json_response, "time":ts}
+    return HttpResponse(json.dumps(r), content_type='application/json')
 
 def real_time_ajax_y(request,building_num):
     curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
-    ts = HealthRDS.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp').reverse()[0].timestamp
-    Magnitudes = MagnitudeRDS.objects.using('data').filter(reading_type=1).filter(timestamp=make_aware(ts,utc))
+    timestamps = HealthRDS.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp').reverse()
     json_response = {}
-    for m in Magnitudes:
-        if m.sensor_id in curr_building_sensors:
-            if not m.sensor_id in json_response:
-                json_response[m.sensor_id] = {"y_data": []}
-            json_response[m.sensor_id]["y_data"].append({"frequency": m.frequency,"magnitude": m.value})
+    if (timestamps.count() > 0):
+        ts = timestamps[0].timestamp
+        Magnitudes = MagnitudeRDS.objects.using('data').filter(reading_type=1).filter(timestamp=make_aware(ts,utc))
+        for m in Magnitudes:
+            if m.sensor_id in curr_building_sensors:
+                if not m.sensor_id in json_response:
+                    json_response[m.sensor_id] = {"y_data": []}
+                # json_response[m.sensor_id]["y_data"].append({"frequency": m.frequency,"magnitude": m.value})
+                json_response[m.sensor_id]["y_data"].append([m.frequency,m.value])
+        r = {"data":json_response, "time":ts}
 
     return HttpResponse(json.dumps(json_response), content_type='application/json')
 
 def real_time_ajax_z(request,building_num):
     curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
-    ts = HealthRDS.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp').reverse()[0].timestamp
-    Magnitudes = MagnitudeRDS.objects.using('data').filter(reading_type=2).filter(timestamp=make_aware(ts,utc))
+    timestamps = HealthRDS.objects.using('data').filter(timestamp__lt=timezone.now()).order_by('timestamp').reverse()
     json_response = {}
-    for m in Magnitudes:
-        if m.sensor_id in curr_building_sensors:
-            if not m.sensor_id in json_response:
-                json_response[m.sensor_id] = {"z_data": []}
-            json_response[m.sensor_id]["z_data"].append({"frequency": m.frequency,"magnitude": m.value})
+    if (timestamps.count() > 0):
+        ts = timestamps[0].timestamp
+        Magnitudes = MagnitudeRDS.objects.using('data').filter(reading_type=1).filter(timestamp=make_aware(ts,utc))
+        for m in Magnitudes:
+            if m.sensor_id in curr_building_sensors:
+                if not m.sensor_id in json_response:
+                    json_response[m.sensor_id] = {"z_data": []}
+                # json_response[m.sensor_id]["z_data"].append({"frequency": m.frequency,"magnitude": m.value})
+                json_response[m.sensor_id]["z_data"].append([m.frequency,m.value])
+        r = {"data":json_response, "time":ts}
 
     return HttpResponse(json.dumps(json_response), content_type='application/json')
 

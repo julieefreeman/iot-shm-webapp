@@ -21,8 +21,8 @@ $(document).ready(function() {
               }
           },
           tooltip: {
-              headerFormat: '<b>{series.name}</b><br>',
-              pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+              headerFormat: '<b>Freq, Mag</b><br>',
+              pointFormat: '({point.x:.2f}, {point.y:.2f})'
           },
           plotOptions: {
               spline: {
@@ -63,8 +63,8 @@ $(document).ready(function() {
               }
           },
           tooltip: {
-              headerFormat: '<b>{series.name}</b><br>',
-              pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+              headerFormat: '<b>Freq, Mag</b><br>',
+              pointFormat: '({point.x:.2f}, {point.y:.2f})'
           },
           plotOptions: {
               spline: {
@@ -105,8 +105,8 @@ $(document).ready(function() {
               }
           },
           tooltip: {
-              headerFormat: '<b>{series.name}</b><br>',
-              pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+              headerFormat: '<b>Freq, Mag</b><br>',
+              pointFormat: '({point.x:.2f}, {point.y:.2f})'
           },
           plotOptions: {
               spline: {
@@ -132,7 +132,6 @@ function executeRealTimeQueryX() {
       url: '/iotshm/real_time_ajax_x/'+$('a[id=active_building]').attr("value"),
       type: 'get',
       dataType: 'json',
-      //data: $('a[id=active_building]').attr("value"),
       success: function(data){
           updateRealTimeChartX(data);
         },
@@ -144,9 +143,10 @@ function executeRealTimeQueryX() {
 
 function updateRealTimeChartX(json) {
     var index = 0;
-    $.each(json, function (sensor, data) {
+    chart.setTitle({text: json["time"]});
+    $.each(json["data"], function (sensor, data) {
         var chart = $('#real-time-chart-x').highcharts();
-        chart.series[index].setData(data['x_data'])
+        chart.series[index].setData(data['x_data']);
         //$.each(data['x_data'], function (key,value) {
         //    var chart = $('#real-time-chart-x').highcharts();
         //    var series = chart.series[index];
@@ -162,7 +162,6 @@ function executeRealTimeQueryY() {
       url: '/iotshm/real_time_ajax_y/'+$('a[id=active_building]').attr("value"),
       type: 'get',
       dataType: 'json',
-      //data: $('a[id=active_building]').attr("value"),
       success: function(data){
           updateRealTimeChartY(data);
         },
@@ -174,12 +173,14 @@ function executeRealTimeQueryY() {
 function updateRealTimeChartY(json) {
     var index = 0;
     $.each(json, function (sensor, data) {
-        $.each(data['y_data'], function (key,value) {
-            var chart = $('#real-time-chart-y').highcharts();
-            var series = chart.series[index];
-            var shift = series.data.length > 50;
-            chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
-        });
+        var chart = $('#real-time-chart-y').highcharts();
+        chart.series[index].setData(data['y_data']);
+        //$.each(data['y_data'], function (key,value) {
+        //    var chart = $('#real-time-chart-y').highcharts();
+        //    var series = chart.series[index];
+        //    var shift = series.data.length > 50;
+        //    chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
+        //});
         index++;
     });
 }
@@ -201,12 +202,14 @@ function executeRealTimeQueryZ() {
 function updateRealTimeChartZ(json) {
     var index = 0;
     $.each(json, function (sensor, data) {
-        $.each(data['z_data'], function (key,value) {
-            var chart = $('#real-time-chart-z').highcharts();
-            var series = chart.series[index];
-            var shift = series.data.length > 50;
-            chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
-        });
+        var chart = $('#real-time-chart-z').highcharts();
+        chart.series[index].setData(data['z_data']);
+        //$.each(data['z_data'], function (key,value) {
+        //    var chart = $('#real-time-chart-z').highcharts();
+        //    var series = chart.series[index];
+        //    var shift = series.data.length > 50;
+        //    chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
+        //});
         index++;
     });
 }
