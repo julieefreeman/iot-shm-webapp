@@ -1,6 +1,6 @@
 $(document).ready(function() {
     //if(document.getElementById("health")!=null) {
-        health_interval = setInterval(executeHealthQuery, 1000);
+        health_interval = setInterval(executeHealthQuery, 500);
     //}
     //else{
     //    clearInterval(health_interval);

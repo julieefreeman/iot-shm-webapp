@@ -35,7 +35,7 @@ $(document).ready(function() {
           },
             series: []
       });
-        real_interval_x = setInterval(executeRealTimeQueryX, 3010);
+        real_interval_x = setInterval(executeRealTimeQueryX, 1010);
     }
     else {
         clearInterval(real_interval_x);
@@ -76,7 +76,7 @@ $(document).ready(function() {
           },
             series: []
       });
-        real_interval_y = setInterval(executeRealTimeQueryY, 3020);
+        real_interval_y = setInterval(executeRealTimeQueryY, 1020);
     }
     else {
         clearInterval(real_interval_y);
@@ -117,7 +117,7 @@ $(document).ready(function() {
           },
             series: []
       });
-        real_interval_z = setInterval(executeRealTimeQueryZ, 3030);
+        real_interval_z = setInterval(executeRealTimeQueryZ, 1030);
     }
     else {
         clearInterval(real_interval_z);
@@ -140,23 +140,20 @@ function executeRealTimeQueryX() {
 
 function updateRealTimeChartX(json) {
     var index = 0;
+    var colors = ['#FF00FF','#33CCFF','#33CC33','#33CC33'];
     var chart = $('#real-time-chart-x').highcharts();
     $.each(json, function (sensor, data) {
         if(index == 0){
-            while(chart.series.length > 0)
+            while(chart.series.length > 0) {
+                //colors.append(chart.series[0].color);
                 chart.series[0].remove(true);
+            }
         }
-        //chart.series[index].setData(data['x_data']);
         chart.addSeries({
             name: data["time"],
-            data: data['x_data']
+            data: data['x_data'],
+            color: colors[index]
         });
-        //$.each(data['x_data'], function (key,value) {
-        //    var chart = $('#real-time-chart-x').highcharts();
-        //    var series = chart.series[index];
-        //    var shift = series.data.length > 50;
-        //    chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
-        //});
         index++;
     });
 }
@@ -176,24 +173,20 @@ function executeRealTimeQueryY() {
 }
 function updateRealTimeChartY(json) {
     var index = 0;
+    var colors = ['#FF00FF','#33CCFF','#33CC33','#33CC33'];
     var chart = $('#real-time-chart-y').highcharts();
-    //chart.setTitle({text: json["time"]});
     $.each(json, function (sensor, data) {
         if(index == 0){
-            while(chart.series.length > 0)
+            while(chart.series.length > 0){
+                //colors.append(chart.series[0].color);
                 chart.series[0].remove(true);
+            }
         }
-        //chart.series[index].setData(data['y_data']);
         chart.addSeries({
             name: data["time"],
-            data: data['y_data']
+            data: data['y_data'],
+            color: colors[index]
         });
-        //$.each(data['y_data'], function (key,value) {
-        //    var chart = $('#real-time-chart-y').highcharts();
-        //    var series = chart.series[index];
-        //    var shift = series.data.length > 50;
-        //    chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
-        //});
         index++;
     });
 }
@@ -203,7 +196,6 @@ function executeRealTimeQueryZ() {
       url: '/iotshm/real_time_ajax_z/'+$('a[id=active_building]').attr("value"),
       type: 'get',
       dataType: 'json',
-      //data: $('a[id=active_building]').attr("value"),
       success: function(data){
           updateRealTimeChartZ(data);
         },
@@ -214,24 +206,20 @@ function executeRealTimeQueryZ() {
 }
 function updateRealTimeChartZ(json) {
     var index = 0;
+    var colors = ['#FF00FF','#33CCFF','#33CC33','#33CC33'];
     var chart = $('#real-time-chart-z').highcharts();
-    //chart.setTitle({text: json["time"]});
     $.each(json, function (sensor, data) {
         if(index == 0){
-            while(chart.series.length > 0)
+            while(chart.series.length > 0) {
+                //colors.append(chart.series[0].color);
                 chart.series[0].remove(true);
+            }
         }
-        //chart.series[index].setData(data['z_data']);
         chart.addSeries({
             name: data["time"],
-            data: data['z_data']
+            data: data['z_data'],
+            color: colors[index]
         });
-        //$.each(data['z_data'], function (key,value) {
-        //    var chart = $('#real-time-chart-z').highcharts();
-        //    var series = chart.series[index];
-        //    var shift = series.data.length > 50;
-        //    chart.series[index].addPoint([value['frequency'],value['magnitude']],true,shift)
-        //});
         index++;
     });
 }

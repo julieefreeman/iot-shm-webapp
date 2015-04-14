@@ -176,11 +176,14 @@ def real_time_ajax_x(request,building_num):
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
     json_response = {}
     for sensor in curr_building_sensors:
-        timestamps = MagnitudeRDS.objects.using('data').filter(sensor_id=sensor).filter(reading_type=0).filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc))).order_by('timestamp').reverse()
-        if (timestamps.count() > 0):
-            ts = timestamps[0].timestamp
-            json_response[sensor] = {"x_data": [], "time":str(ts)}
-            Magnitude = MagnitudeRDS.objects.using('data').filter(reading_type=0).get(timestamp=make_aware(ts, utc))
+        magnitudes = MagnitudeRDS.objects.using('data')\
+            .filter(sensor_id=sensor)\
+            .filter(reading_type=0)\
+            .filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc)))\
+            .order_by('timestamp').reverse()
+        if (magnitudes.count() > 0):
+            Magnitude = magnitudes[0]
+            json_response[sensor] = {"x_data": [], "time":str(Magnitude.timestamp)}
             freqs = Magnitude.frequency.split(',')
             mags = Magnitude.magnitude.split(',')
             for i in range(len(freqs)):
@@ -192,11 +195,10 @@ def real_time_ajax_y(request,building_num):
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
     json_response = {}
     for sensor in curr_building_sensors:
-        timestamps = MagnitudeRDS.objects.using('data').filter(sensor_id=sensor).filter(reading_type=1).filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc))).order_by('timestamp').reverse()
-        if (timestamps.count() > 0):
-            ts = timestamps[0].timestamp
-            json_response[sensor] = {"y_data": [], "time":str(ts)}
-            Magnitude = MagnitudeRDS.objects.using('data').filter(reading_type=1).get(timestamp=make_aware(ts, utc))
+        magnitudes = MagnitudeRDS.objects.using('data').filter(sensor_id=sensor).filter(reading_type=1).filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc))).order_by('timestamp').reverse()
+        if (magnitudes.count() > 0):
+            Magnitude = magnitudes[0]
+            json_response[sensor] = {"y_data": [], "time":str(Magnitude.timestamp)}
             freqs = Magnitude.frequency.split(',')
             mags = Magnitude.magnitude.split(',')
             for i in range(len(freqs)):
@@ -208,11 +210,10 @@ def real_time_ajax_z(request,building_num):
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
     json_response = {}
     for sensor in curr_building_sensors:
-        timestamps = MagnitudeRDS.objects.using('data').filter(sensor_id=sensor).filter(reading_type=2).filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc))).order_by('timestamp').reverse()
-        if (timestamps.count() > 0):
-            ts = timestamps[0].timestamp
-            json_response[sensor] = {"z_data": [], "time":str(ts)}
-            Magnitude = MagnitudeRDS.objects.using('data').filter(reading_type=2).get(timestamp=make_aware(ts, utc))
+        magnitudes = MagnitudeRDS.objects.using('data').filter(sensor_id=sensor).filter(reading_type=2).filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc))).order_by('timestamp').reverse()
+        if (magnitudes.count() > 0):
+            Magnitude = magnitudes[0]
+            json_response[sensor] = {"z_data": [], "time":str(Magnitude.timestamp)}
             freqs = Magnitude.frequency.split(',')
             mags = Magnitude.magnitude.split(',')
             for i in range(len(freqs)):
@@ -223,7 +224,7 @@ def health(request,building_num):
     curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
     unhealthys = MagnitudeRDS.objects.using('data')\
-        .filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(minutes=5)), utc)))\
+        .filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=5)), utc)))\
         .filter(sensor_id__in = curr_building_sensors)\
         .filter(healthy=0)
 
