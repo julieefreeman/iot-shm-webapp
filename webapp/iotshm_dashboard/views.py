@@ -1,21 +1,15 @@
-# Create your views here.
-# from iotshm_dashboard.forms import UserForm
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from iotshm_dashboard.models import Building, MagnitudeRDS, SensorRDS #, HealthRDS
+from iotshm_dashboard.models import Building, MagnitudeRDS, SensorRDS
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
-# from django.contrib.auth.models import User
 import json
 import datetime
-# from datetime import datetime, timedelta
-# from random import randint
-# from django.utils import timezone
-from django.utils.timezone import get_current_timezone, make_aware, utc
+from django.utils.timezone import make_aware, utc
 
 def index(request):
     context = {}
@@ -171,7 +165,7 @@ def user_login(request):
         return render_to_response('registration/login.html', {}, context)
 
 
-def real_time_ajax_x(request,building_num):
+def real_time_ajax(request,building_num):
     curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
     json_response = {}
@@ -181,43 +175,9 @@ def real_time_ajax_x(request,building_num):
             .filter(reading_type=0)\
             .filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc)))\
             .order_by('timestamp').reverse()
-        if (magnitudes.count() > 0):
-            Magnitude = magnitudes[0]
-            json_response[sensor] = {"x_data": [], "time":str(Magnitude.timestamp)}
-            freqs = Magnitude.frequency.split(',')
-            mags = Magnitude.magnitude.split(',')
-            for i in range(len(freqs)):
-                json_response[sensor]["x_data"].append([int(freqs[i]),int(mags[i])])
-    return HttpResponse(json.dumps(json_response), content_type='application/json')
-
-def real_time_ajax_y(request,building_num):
-    curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
-    curr_building_sensors = [str(s.id) for s in curr_building_sensors]
-    json_response = {}
-    for sensor in curr_building_sensors:
-        magnitudes = MagnitudeRDS.objects.using('data').filter(sensor_id=sensor).filter(reading_type=1).filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc))).order_by('timestamp').reverse()
-        if (magnitudes.count() > 0):
-            Magnitude = magnitudes[0]
-            json_response[sensor] = {"y_data": [], "time":str(Magnitude.timestamp)}
-            freqs = Magnitude.frequency.split(',')
-            mags = Magnitude.magnitude.split(',')
-            for i in range(len(freqs)):
-                json_response[sensor]["y_data"].append([int(freqs[i]),int(mags[i])])
-    return HttpResponse(json.dumps(json_response), content_type='application/json')
-
-def real_time_ajax_z(request,building_num):
-    curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
-    curr_building_sensors = [str(s.id) for s in curr_building_sensors]
-    json_response = {}
-    for sensor in curr_building_sensors:
-        magnitudes = MagnitudeRDS.objects.using('data').filter(sensor_id=sensor).filter(reading_type=2).filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc))).order_by('timestamp').reverse()
-        if (magnitudes.count() > 0):
-            Magnitude = magnitudes[0]
-            json_response[sensor] = {"z_data": [], "time":str(Magnitude.timestamp)}
-            freqs = Magnitude.frequency.split(',')
-            mags = Magnitude.magnitude.split(',')
-            for i in range(len(freqs)):
-                json_response[sensor]["z_data"].append([int(freqs[i]),int(mags[i])])
+        json_response[sensor] = {"data": [], "sensor": sensor}
+        for m in magnitudes:
+            json_response[sensor]["data"].append([m.timestamp,m.magnitude])
     return HttpResponse(json.dumps(json_response), content_type='application/json')
 
 def health(request,building_num):
