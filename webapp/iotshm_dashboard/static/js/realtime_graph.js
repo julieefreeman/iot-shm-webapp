@@ -66,12 +66,29 @@ function updateRealTimeChart(json) {
     var index = 0;
     var chart = $('#real-time-chart').highcharts();
     $.each(json, function (sensor, data) {
-        $.each(data['data'], function (key,value) {
-            var chart = $('#real-time-chart').highcharts();
-            var series = chart.series[index];
+        var chart = $('#real-time-chart').highcharts();
+        var series = chart.series[index];
+        if (series!=null) {
             var shift = series.data.length > 50;
-            chart.series[index].addPoint(value,true,shift);
+        }
+        else{
+            chart.addSeries({
+                name: sensor,
+                data: data
+            });
+            var shift = false;
+        }
+        data.forEach(function(d) {
+            chart.series[index].addPoint([d[0],d[1]],true,shift);
         });
+        //$.each(data['data'], function (key,value) {
+        //    $("#debugging").append("<h2>key: "+key+"</h2>");
+        //    $("#debugging").append("<h2>value: "+value+"</h2>");
+        //    var chart = $('#real-time-chart').highcharts();
+        //    var series = chart.series[index];
+        //    var shift = series.data.length > 50;
+        //    chart.series[index].addPoint(value,true,shift);
+        //});
         index++;
     });
 }

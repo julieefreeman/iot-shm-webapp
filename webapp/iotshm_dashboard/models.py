@@ -13,7 +13,7 @@ class Building(models.Model):
     def __str__(self):
         return "%s (%d)" % (self.name, self.number)
 
-class SensorRDS(models.Model): # stored in the remote database
+class SensorRDS(models.Model): # in RDS database - not locally stored
     building_id = models.IntegerField()
     id = models.CharField(max_length=300, primary_key=True)  # AutoField?
 
@@ -24,7 +24,18 @@ class SensorRDS(models.Model): # stored in the remote database
     def __str__(self):
         return "#%s (%d)" % (self.id, self.building_id)
 
-class MagnitudeRDS(models.Model): # in RDS database - not locally stored
+# class MagnitudeRDS1(models.Model): # in RDS database - not locally stored
+#     sensor_id = models.CharField(max_length=300,primary_key=True) #foreign key due to the way it's coded
+#     timestamp = models.DateTimeField(primary_key=True)
+#     magnitude = models.FloatField()
+#     reading_type = models.IntegerField(primary_key=True)
+#     healthy = models.IntegerField()
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'Magnitude'
+
+class MagnitudeRDS2(models.Model): # in RDS database - not locally stored
     sensor_id = models.CharField(max_length=300,primary_key=True) #foreign key due to the way it's coded
     timestamp = models.DateTimeField(primary_key=True)
     magnitude = models.FloatField()
