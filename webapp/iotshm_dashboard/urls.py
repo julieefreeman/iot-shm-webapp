@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^dashboard/my_buildings/$', views.my_buildings, name='my_buildings'),
     url(r'^health/(?P<building_num>\d+)/$', views.health, name='health'),
     url(r'^real_time_ajax/(?P<building_num>\d+)/$', views.real_time_ajax, name='real_time_ajax'),
+    url(r'^long_term_ajax/(?P<building_num>\d+)/$', views.long_term_ajax, name='long_term_ajax')
 )

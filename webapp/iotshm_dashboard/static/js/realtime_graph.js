@@ -23,7 +23,7 @@ $(document).ready(function() {
                     text: 'Magnitude'
                 },
                 min: 0,
-                max: 64
+                max: 170
             },
             tooltip: {
                 formatter: function() {
@@ -33,15 +33,21 @@ $(document).ready(function() {
                 }
             },
             plotOptions: {
-                spline: {
+                series: {
                     marker: {
-                        //enabled: true
+                        enabled: false,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                radius: 3
+                            }
+                        }
                     }
                 }
             },
             series: []
       });
-        var real_interval = setInterval(executeRealTimeQuery, 1010);
+        var real_interval = setInterval(executeRealTimeQuery, 1000);
     }
     else {
         clearInterval(real_interval);
@@ -66,17 +72,18 @@ function updateRealTimeChart(json) {
     var index = 0;
     var chart = $('#real-time-chart').highcharts();
     $.each(json, function (sensor, data) {
+        // $("#debugging").append("<h2>data: "+data+"</h2>");
         var chart = $('#real-time-chart').highcharts();
         var series = chart.series[index];
+        var shift = false;
         if (series!=null) {
-            var shift = series.data.length > 50;
+            shift = series.data.length > 500;
         }
         else{
             chart.addSeries({
                 name: sensor,
                 data: data
             });
-            var shift = false;
         }
         data.forEach(function(d) {
             chart.series[index].addPoint([d[0],d[1]],true,shift);

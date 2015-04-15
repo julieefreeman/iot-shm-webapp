@@ -37,7 +37,7 @@ class SensorRDS(models.Model): # in RDS database - not locally stored
 
 class MagnitudeRDS2(models.Model): # in RDS database - not locally stored
     sensor_id = models.CharField(max_length=300,primary_key=True) #foreign key due to the way it's coded
-    timestamp = models.DateTimeField(primary_key=True)
+    timestamp = models.IntegerField(primary_key=True)
     magnitude = models.FloatField()
     reading_type = models.IntegerField(primary_key=True)
     healthy = models.IntegerField()

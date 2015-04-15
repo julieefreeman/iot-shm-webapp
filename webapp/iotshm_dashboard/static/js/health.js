@@ -1,6 +1,12 @@
 $(document).ready(function() {
     //if(document.getElementById("health")!=null) {
-        health_interval = setInterval(executeHealthQuery, 500);
+    //if($('a[id=active_building]')!=null){
+    health_interval = setInterval(executeHealthQuery, 1000);
+    //}
+    //else{
+    //    health_interval = setInterval(executeHealthQuery9, 500);
+    //}
+
     //}
     //else{
     //    clearInterval(health_interval);
@@ -16,9 +22,13 @@ function executeHealthQuery() {
               document.getElementById("health").innerHTML = "Healthy";
               document.getElementById("health").style.backgroundColor = "limegreen";
           }
-          else{
+          else if (data['healthy'] == false) {
               document.getElementById("health").innerHTML = "Unhealthy";
               document.getElementById("health").style.backgroundColor = "darkred";
+          }
+          else {
+              document.getElementById("health").innerHTML = "N/A";
+              document.getElementById("health").style.backgroundColor = "gray";
           }
         },
       error: function(data){

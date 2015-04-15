@@ -1,4 +1,5 @@
 $(function () {
+
     var data = [
         0.8446, 0.8445, 0.8444, 0.8451,    0.8418, 0.8264,    0.8258, 0.8232,    0.8233, 0.8258,
         0.8283, 0.8278, 0.8256, 0.8292,    0.8239, 0.8239,    0.8245, 0.8265,    0.8261, 0.8269,
@@ -112,13 +113,14 @@ $(function () {
         0.714, 0.7119, 0.7129, 0.7129, 0.7049, 0.7095
     ],
         detailChart;
+    data = getLongTermData;
 
     $(document).ready(function () {
 
         // create the detail chart
         function createDetail(masterChart) {
 
-            // prepare the detail chart
+            //prepare the detail chart
             var detailData = [],
                 detailStart = Date.UTC(2008, 7, 1);
 
@@ -143,7 +145,7 @@ $(function () {
                     enabled: false
                 },
                 title: {
-                    text: 'Historical USD to EUR Exchange Rate'
+                    text: 'Historical Building Health'
                 },
                 subtitle: {
                     text: 'Select an area by dragging across the lower chart'
@@ -161,8 +163,8 @@ $(function () {
                     formatter: function () {
                         var point = this.points[0];
                         return '<b>' + point.series.name + '</b><br/>' +
-                            Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +
-                            '1 USD = ' + Highcharts.numberFormat(point.y, 2) + ' EUR';
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>';
+                            //'1 USD = ' + Highcharts.numberFormat(point.y, 2) + ' EUR';
                     },
                     shared: true
                 },
@@ -183,7 +185,7 @@ $(function () {
                     }
                 },
                 series: [{
-                    name: 'USD to EUR',
+                    name: 'Health',
                     pointStart: detailStart,
                     pointInterval: 24 * 3600 * 1000,
                     data: detailData
@@ -241,9 +243,7 @@ $(function () {
                                 color: 'rgba(0, 0, 0, 0.2)'
                             });
 
-
                             detailChart.series[0].setData(detailData);
-
                             return false;
                         }
                     }
@@ -315,7 +315,8 @@ $(function () {
                     name: 'USD to EUR',
                     pointInterval: 24 * 3600 * 1000,
                     pointStart: Date.UTC(2006, 0, 1),
-                    data: data
+                    data: data,
+                    step: true
                 }],
 
                 exporting: {
@@ -324,8 +325,7 @@ $(function () {
 
             }, function (masterChart) {
                 createDetail(masterChart);
-            })
-                .highcharts(); // return chart instance
+            }).highcharts(); // return chart instance
         }
 
         // make the container smaller and add a second container for the master chart
@@ -344,3 +344,18 @@ $(function () {
     });
 
 });
+
+function getLongTermData(json) {
+    $.ajax({
+        url: '/iotshm/long_term_ajax/'+$('a[id=active_building]').attr("value"),
+        type: 'get',
+        dataType: 'json',
+        success: function(data){
+            $("#debugging").append("<h2>data: "+data+"</h2>");
+            return data;
+        },
+        error: function(data){
+            $("#debugging").append("<h2>error: "+data.responseText+"</h2>");
+        }
+    });
+}

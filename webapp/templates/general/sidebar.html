@@ -47,10 +47,10 @@
                               class="list-group-item{% if request.path == real_time %} active{% endif %}"
                               href="{{ real_time }}">{% bootstrap_icon "play"   %}  Real Time Analysis
                           </a>
-                          <a style="font-size:12px"
-                              class="list-group-item{% if request.path == long_term %} active{% endif %}"
-                              href="{{ long_term }}">{% bootstrap_icon "time" %}  Long Term Trends
-                          </a>
+{#                          <a style="font-size:12px"#}
+{#                              class="list-group-item{% if request.path == long_term %} active{% endif %}"#}
+{#                              href="{{ long_term }}">{% bootstrap_icon "time" %}  Long Term Trends#}
+{#                          </a>#}
                           <a style="font-size:12px"
                               class="list-group-item{% if request.path == sensors %} active{% endif %}"
                               href="{{ sensors }}">{% bootstrap_icon "info-sign" %}  Sensors

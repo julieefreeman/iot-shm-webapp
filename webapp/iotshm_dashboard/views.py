@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 import json
 import datetime
+import time
+import math
 from django.utils.timezone import make_aware, utc
 
 def index(request):
@@ -67,15 +69,17 @@ def real_time(request, building_num):
                 'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/real_time.html', data, context)
 
-
 @login_required
 def long_term(request, building_num):
     context = RequestContext(request)
+    curr_building = Building.objects.get(number=building_num)
     if request.user.username == 'admin':
-        data = {'curr_building':Building.objects.get(number=building_num),
+        data = {'sensors':SensorRDS.objects.using('data').filter(building_id=building_num),
+                'curr_building':curr_building,
                 'buildings':Building.objects.all()}
     else:
-        data = {'curr_building':Building.objects.get(number=building_num),
+        data = {'sensors':SensorRDS.objects.using('data').filter(building_id=building_num),
+                'curr_building':curr_building,
                 'buildings':Building.objects.filter(manager=request.user)}
     return render_to_response('iotshm_dashboard/long_term.html', data, context)
 
@@ -170,32 +174,60 @@ def real_time_ajax(request,building_num):
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
     json_response = {}
     for sensor in curr_building_sensors:
-        # magnitudes = MagnitudeRDS.objects.using('data')\
-        #     .filter(sensor_id=sensor)\
-        #     .filter(reading_type=0)\
-        #     .filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=15)), utc)))\
-        #     .order_by('timestamp').reverse()
         magnitudes = MagnitudeRDS2.objects.using('data')\
             .filter(sensor_id=sensor)\
             .filter(reading_type=0)\
+            .filter(timestamp__gt=str((int(time.time())-15)))\
             .order_by('timestamp').reverse()
+        # magnitudes = MagnitudeRDS2.objects.using('data')\
+        #     .filter(sensor_id=sensor)\
+        #     .filter(reading_type=0)\
+        #     .order_by('timestamp').reverse()
         json_response[sensor] = []
         for m in magnitudes:
-            unix_timestamp = m.timestamp.strftime("%s")
-            json_response[sensor].append([unix_timestamp,m.magnitude])
+            json_response[sensor].append([m.timestamp*1000,m.magnitude])
+    return HttpResponse(json.dumps(json_response), content_type='application/json')
+
+def long_term_ajax(request, building_num):
+    curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
+    curr_building_sensors = [str(s.id) for s in curr_building_sensors]
+    json_response = {}
+    for sensor in curr_building_sensors:
+        json_response[sensor] = []
+        magnitudes = MagnitudeRDS2.objects.using('data')\
+            .filter(sensor_id=sensor)\
+            .filter(reading_type=0)\
+            .filter(timestamp__gt=(int(time.time())-150))\
+            .order_by('timestamp').reverse()
+        # magnitudes = MagnitudeRDS2.objects.using('data')\
+        #     .filter(sensor_id=sensor)\
+        #     .filter(reading_type=0)\
+        #     .filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(hours=26297)), utc)))\
+        #     .order_by('timestamp').reverse()
+        for m in magnitudes:
+            json_response[sensor].append([m.timestamp,m.healthy])
     return HttpResponse(json.dumps(json_response), content_type='application/json')
 
 def health(request,building_num):
     curr_building_sensors = SensorRDS.objects.using('data').filter(building_id=building_num)
     curr_building_sensors = [str(s.id) for s in curr_building_sensors]
-    # unhealthys = MagnitudeRDS.objects.using('data')\
-    #     .filter(timestamp__gt=(make_aware((datetime.datetime.utcnow() - datetime.timedelta(seconds=5)), utc)))\
-    #     .filter(sensor_id__in = curr_building_sensors)\
-    #     .filter(healthy=0)
-    unhealthys = MagnitudeRDS2.objects.using('data')\
+    magnitudes = MagnitudeRDS2.objects.using('data')\
+        .filter(timestamp__gt=str(int(time.time())-20))\
         .filter(sensor_id__in = curr_building_sensors)\
-        .filter(healthy=0)
-    json_response = {'healthy':len(unhealthys)==0}
+        .order_by('timestamp').reverse()
+    if magnitudes.count() > 0:
+        threshold = math.ceil(magnitudes.count()*.3)
+        num_healthy = 0
+        for m in magnitudes:
+            if m.healthy==1:
+                num_healthy += 1
+        json_response = {'healthy': num_healthy > threshold}
+    else:
+        json_response = {'healthy': None}
+    # unhealthys = MagnitudeRDS2.objects.using('data')\
+    #     .filter(sensor_id__in=curr_building_sensors)\
+    #     .filter(healthy=0)
+    # json_response = {'healthy':len(unhealthys)==0}
     return HttpResponse(json.dumps(json_response), content_type='application/json')
 
 @login_required

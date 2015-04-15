@@ -2,8 +2,10 @@
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load static %}
 
 {% block nextto_sidebar %}
+    <script src="{% static "js/health.js" %}"></script>
     <h2>{{user.first_name}}'s Active Buildings:</h2></br>
      {% for building in buildings %}
 {#        {% if building.manager == user or user.username == 'admin' %}#}
@@ -24,7 +26,7 @@
                        <div class="row">
                             <div class="col-xs-5 pull-right"></br></br>
 {#                                <div class="panel text-center" style="border-color:white; background-color: darkred; color: white; font-size: 25px;">Unhealthy</div>#}
-                                <div class="panel text-center"
+                                <div class="panel text-center" id="health_indicator" value="{{ building.number }}"
                                      style="border-color:white; background-color: limegreen; color: white; font-size: 25px;">
                                     Healthy
                                 </div>
